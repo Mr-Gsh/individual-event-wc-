@@ -87,50 +87,47 @@ public class function {
 	}
 	
 		//统计文件或者文件夹中程序文件的空行、代码行、注释行，有递归文件目录功能
-		void diffline(File file) throws IOException {
-			int spaceline = 0;
-			int nodeline = 0;
-			int codeline = 0;
-			if (file == null || !file.exists()) {
-				System.out.println(file + "，文件不存在！");
-			}else {
-			if (file.isDirectory()) {
-				File[] files = file.listFiles(new FileFilter() {
-					public boolean accept(File pathname) {
-						return pathname.getName().endsWith(".java")|| pathname.isDirectory()||
-								pathname.getName().endsWith(".c")||pathname.getName().endsWith(".cpp")  ;
+			int[] diffline(File file) throws IOException {
+				int spaceline = 0;
+				int nodeline = 0;
+				int codeline = 0;
+				if (file == null || !file.exists()) {
+					System.out.println(file + "，文件不存在！");
+				}else {
+				if (file.isDirectory()) {
+					File[] files = file.listFiles(new FileFilter() {
+						public boolean accept(File pathname) {
+							return pathname.getName().endsWith(".java")|| pathname.isDirectory()||
+									pathname.getName().endsWith(".c")||pathname.getName().endsWith(".cpp")  ;
+						}
+					});
+					//递归文件目录
+					for (File target : files) {
+						diffline(target);
 					}
-				});
-				//递归文件目录
-				for (File target : files) {
-					diffline(target);
+				} else {
+					// 将指定路径的文件与字符流绑定
+					BufferedReader bufr = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+					// 定义匹配每一行的正则匹配器
+					Pattern nodeLinePattern = Pattern.compile("((//)|(/\\*+)|((^\\s)*\\*)|((^\\s)*\\*+/))+", 
+							Pattern.MULTILINE + Pattern.DOTALL);	// 注释匹配器(匹配单行、多行、文档注释)
+					Pattern spaceLinePattern = Pattern.compile("^\\s*$");	// 空白行匹配器（匹配回车、tab键、空格）
+					
+					// 遍历文件中的每一行，并根据正则匹配的结果记录每一行匹配的结果
+					String line = null;
+						while((line = bufr.readLine()) != null) {
+							if (nodeLinePattern.matcher(line).find()) {
+								nodeline ++;
+							}else if (spaceLinePattern.matcher(line).find()) {
+								spaceline ++;
+							}else{
+								codeline ++;
+							} 
+						}
 				}
-			} else {
-				System.out.println("文件名:"+file.getAbsolutePath());
-				// 将指定路径的文件与字符流绑定
-				BufferedReader bufr = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-				// 定义匹配每一行的正则匹配器
-				Pattern nodeLinePattern = Pattern.compile("((//)|(/\\*+)|((^\\s)*\\*)|((^\\s)*\\*+/))+", 
-						Pattern.MULTILINE + Pattern.DOTALL);	// 注释匹配器(匹配单行、多行、文档注释)
-	 
-				Pattern spaceLinePattern = Pattern.compile("^\\s*$");	// 空白行匹配器（匹配回车、tab键、空格）
-				
-				// 遍历文件中的每一行，并根据正则匹配的结果记录每一行匹配的结果
-				String line = null;
-					while((line = bufr.readLine()) != null) {
-						if (nodeLinePattern.matcher(line).find()) {
-							nodeline ++;
-						}else if (spaceLinePattern.matcher(line).find()) {
-							spaceline ++;
-						}else{
-							codeline ++;
-						} 
-					}
-				System.out.println("空行数:"+spaceline);
-				System.out.println("注释行数:"+nodeline);
-				System.out.println("代码行数:"+codeline);
+				}
+				int[] Sline= {spaceline,nodeline,codeline};
+				return Sline;
 			}
-			}
-		}
 		
 }

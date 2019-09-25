@@ -35,14 +35,20 @@ public class Main {
 						System.out.println("该文件的行数:"+line);
 					}else if(strword[0].equals("-a")) {
 						File file = new File(strword[1]);
-						ft.diffline(file);
+						int[] line = ft.diffline(file);
+						System.out.println("空行数:"+line[0]);
+						System.out.println("注释行数:"+line[1]);
+						System.out.println("代码行数:"+line[0]);
 					}else if(strword[0].equals("-s-a")) {
 						File file = new File(strword[1]);
-						ft.diffline(file);
+						int[] line = ft.diffline(file);
+						System.out.println("空行数:"+line[0]);
+						System.out.println("注释行数:"+line[1]);
+						System.out.println("代码行数:"+line[0]);
 					}
 					}else {
 						if(strword[0].equals("-x")) {
-							//GUI.main(null);
+							GUI.main(null);
 						}else if(strword[0].equals("end")) {
 							break;
 						}else {

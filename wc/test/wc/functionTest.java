@@ -26,4 +26,9 @@ class functionTest {
 		fail("Not yet implemented");
 	}
 
+	@Test
+	void testDifflineGUI() {
+		fail("Not yet implemented");
+	}
+
 }
