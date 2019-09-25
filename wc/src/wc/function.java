@@ -51,6 +51,12 @@ public class function {
 				str = sbf.toString();
 				strword = str.split("\\s+");
 			}
+			if(strword==null) {
+				System.out.println("该文件为空");
+				br.close();
+				fr.close();
+				return 0;
+			}
 			for(int i=0;i<strword.length;i++) {
 				Pattern pattern = Pattern.compile("[0-9a-zA-Z]*");
 				Matcher matcher = pattern.matcher(strword[i]);
